@@ -1,7 +1,17 @@
 ---
 title: "About me"
 ---
+# About Me
 
-Add some text and a figure describing myself.
+Hello! My name is **Riley Herber**, and I am a Bioinformatics Masters student at the University of Georgia. I graduated from UGA is a BS in Biochemistry and Molecular Biology and enrolled into the Double Dawgs program. 
 
-For details, see the instructions. 
+## Background
+While I am not currently in a research lab/position, I have past experience working under other Bioinformatics PhD students. I have experience with other programing languages such as:
+
+-MATLAB
+-C++
+-Python
+
+I have basic data analysis and modeling experience with these languages.
+
+I will be taking BIOS7010 alongside this course, but have taken Statistical Inference for the Life Sciences (BINF 8441) in the past, which introduced statistical topics such as probability, maximum likelihood, Bayesian inference, linear regression etc.
