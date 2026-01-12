@@ -21,3 +21,13 @@ I have basic data analysis and modeling experience with these languages.
 ## Statistical Background
 
 I will be taking BIOS7010 alongside this course, but have taken Statistical Inference for the Life Sciences (BINF 8441) in the past, which introduced statistical topics such as probability, maximum likelihood, Bayesian inference, linear regression etc.
+
+## Hopes For This Class
+
+I hope to learn how to adequately design and use effective data analysis workflows. I want to gain hands-on experience with a variety of analytical methods that will help me approach future research questions and real-world problems with confidence. I am currently unfamiliar with Positron and Quarto, so I am especially excited to expand my technical skill set by learning these tools, along with others we will explore throughout the semester.
+
+## Link
+
+[Climate Spiral Visualization](https://www.climate-lab-book.ac.uk/spirals/)
+
+This website provides a cool example of how data analysis and visualization is important, while being very visually engaging and impactful. This animation shows how global temperatures have changed over time, using a spiral that expands outward as the Earth warms. It’s a great example of how data analysis can be turned into a visual story and then communicated to the audience.
