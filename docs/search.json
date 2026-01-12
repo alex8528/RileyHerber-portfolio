@@ -1,24 +1,10 @@
 [
   {
-    "objectID": "starter-analysis-exercise/starter-analysis-exercise.html",
-    "href": "starter-analysis-exercise/starter-analysis-exercise.html",
-    "title": "Future Exercise",
-    "section": "",
-    "text": "Placeholder file for a future exercise."
-  },
-  {
     "objectID": "aboutme.html",
     "href": "aboutme.html",
     "title": "About me",
     "section": "",
     "text": "Hello! My name is Riley Herber, and I am a Bioinformatics Masters student at the University of Georgia. I graduated from UGA is a BS in Biochemistry and Molecular Biology and enrolled into the Double Dawgs program.\n\n\nWhile I am not currently in a research lab/position, I have past experience working under other Bioinformatics PhD students. I have experience with other programming languages such as:\n\nMATLAB\nC++\nPython\n\nI have basic data analysis and modeling experience with these languages.\n\n\n\nI will be taking BIOS7010 alongside this course, but have taken Statistical Inference for the Life Sciences (BINF 8441) in the past, which introduced statistical topics such as probability, maximum likelihood, Bayesian inference, linear regression etc.\n\n\n\nI hope to learn how to adequately design and use effective data analysis workflows. I want to gain hands-on experience with a variety of analytical methods that will help me approach future research questions and real-world problems with confidence. I am currently unfamiliar with Positron and Quarto, so I am especially excited to expand my technical skill set by learning these tools, along with others we will explore throughout the semester.\n\n\n\nClimate Spiral Visualization\nThis website provides a cool example of how data analysis and visualization is important, while being very visually engaging and impactful. This animation shows how global temperatures have changed over time, using a spiral that expands outward as the Earth warms. It’s a great example of how data analysis can be turned into a visual story and then communicated to the audience."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "My website and data analysis portfolio",
-    "section": "",
-    "text": "Hello\n\nAnd hello again\nWelcome to my website and data analysis portfolio.\n\nPlease use the Menu Bar above to look around.\nHave fun!"
   },
   {
     "objectID": "aboutme.html#background",
