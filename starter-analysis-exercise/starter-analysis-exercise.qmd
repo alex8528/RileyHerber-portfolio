@@ -1,5 +1,139 @@
 ---
-title: "Future Exercise"
+title: "Data Analysis Introduction Exercise"
 ---
 
-Placeholder file for a future exercise.
+**Gathering Data**
+
+```{r}
+# load dslabs package
+library("dslabs")
+
+#takes gapminder dataset and creates a new dataframe that only takes the countries that have "Africa" in the continent column
+africadata <- gapminder[gapminder$continent == "Africa", ]
+
+#creates a new dataframe and adds the columns "infant_mortality" and "life_expectancy" from africadata
+africa_infant_mortality <- africadata[, c("infant_mortality", "life_expectancy")]
+
+#creates a new dataframe and adds the columns "population" and "life_expectancy" from africadata
+africa_pop <- africadata[, c("population", "life_expectancy")]
+
+```
+
+**Plotting**
+
+```{r}
+#Plotting life expectancy as a function of infant mortality
+#using the plot function to make the plot and assigning it to a variable named "plot1"
+plot1 <- plot( 
+  
+  #takes the infant_mortality column from africa_infant_mortality and makes it the x-axis values
+  africa_infant_mortality$infant_mortality, 
+  
+  #takes the life expactancy column from africa_infant_mortality and makes it the y-axis values  
+  africa_infant_mortality$life_expectancy, 
+    
+  xlab = "Life Expectancy", #labels the x-axis "Life Expectancy"
+  ylab = "Infant Mortality", #labels the y-axis "Infant Mortality"
+  
+  #titles the whole plot "Infant Mortality vs Life Expectancy in Africa"
+  main = "Infant Mortality vs Life Expectancy in Africa" 
+)
+
+#Plotting life expectancy as a function of population
+#using the plot function to make the plot and assigning it to a variable named "plot2"
+plot2 <- plot( 
+
+  #takes the population column from africa_pop and makes it the x-axis values
+  africa_pop$population, 
+
+  #takes the life expactancy column from africa_pop and makes it the y-axis values
+  africa_pop$life_expectancy, 
+
+  xlab = "Life Expectancy", #labels the x-axis "Life Expectancy"
+  ylab = "Population", #labels the y-axis "Population"
+
+  #titles the whole plot "Population vs Life Expectancy in Africa"
+  main = "Population vs Life Expectancy in Africa",
+    
+  log = "x" #sets the scale of the x-axis to be logarithmic
+)
+```
+
+You should also see a positive correlation between population size and life expectancy. In both plots, especially the second one, you will see ‘streaks’ of data that seem to go together. Can you figure out what is going on here?
+
+The “streaks” in the plots likely represent individual countries observed across multiple years. Because africadata contains statistics for infant mortality and population for the same countries across different years, multiple observations from each country appear in the plots. Since these values typically change gradually over time within a country, the data points remain close together, forming visible “streaks.”
+
+**More Data Processing**
+
+```{r}
+#figures out which years have missing data for infant mortality
+tapply(africadata$infant_mortality, africadata$year, function(x) sum(is.na(x)))
+       
+#the tapply function applies a funciton to a set vectors
+#tapply is applying the function sum(is.na(x)) to the groups africadata$infant_mortality and africadata$year
+#the sum() function takes the sum/total of a group
+#the is.na() function checks each value in a dataframe/group is NA or not
+#so sum(is.na(x) returns the total amount of NA values in each year
+
+#Creates a new object by extracting only the data for the year 2000 from the africadata object
+africa_2000 <- africadata[africadata$year == "2000",]
+```
+
+**More Plotting**
+
+```{r}
+#Plotting life expectancy as a function of infant mortality for year 2000
+#using the plot function to make the plot and assigning it to a variable named "plot3"
+plot3 <- plot( 
+
+  #takes the infant_mortality column from africa_2000 and makes it the x-axis values
+  africa_2000$infant_mortality,
+
+  #takes the life expactancy column from africa_2000 and makes it the y-axis values
+  africa_2000$life_expectancy,
+    
+  xlab = "Life Expectancy", #labels the x-axis "Life Expectancy"
+  ylab = "Infant Mortality", #labels the y-axis "Infant Mortality"
+
+  #titles the whole plot "Infant Mortality vs Life Expectancy in Africa in 2000"
+  main = "Infant Mortality vs Life Expectancy in Africa in 2000"
+)
+
+#Plotting life expectancy as a function of population
+#using the plot function to make the plot and assigning it to a variable named "plot4"
+plot4 <- plot( 
+
+  #takes the population column from africa_2000 and makes it the x-axis values 
+  africa_2000$population, 
+
+  #takes the life expactancy column from africa_2000 and makes it the y-axis values
+  africa_2000$life_expectancy, 
+    
+  xlab = "Life Expectancy", #labels the x-axis "Life Expectancy"
+  ylab = "Population", #labels the y-axis "Population"
+
+  #titles the whole plot "Population vs Life Expectancy in Africa in 2000"
+  main = "Population vs Life Expectancy in Africa in 2000", 
+    
+  log = "x" #sets the scale of the x-axis to be logarithmic
+)
+```
+
+**Simple Model Fits**
+
+```{r}
+# fit1 models life expectancy as a function of infant mortality for African countries in 2000.
+#the lm() function is used to fit linear models
+fit1 <- lm(life_expectancy ~ infant_mortality, data = africa_2000)
+summary(fit1) #prints results of fir1
+```
+
+The relationship between life expectancy and infant mortality are highly significant (p-value: 2.826e-08) and strongly negatively correlated. Based on the slope, each additional infant death per 1,000 live births is associated with a decrease of approximately 0.19 years in life expectancy. When infant mortality is theoretically zero, predicted life expectancy is about 71.3 years. R squared = 0.47 means about 47% of the variability in life expectancy is explained by infant mortality.
+
+```{r}
+# fit2 models life expectancy as a function of population for African countries in 2000.
+fit2 <- lm(life_expectancy ~ population, data = africa_2000)
+summary(fit2) #prints results of fir1
+```
+
+Unlike infant mortality, population size does not appear to have a meaningful effect on life expectancy (p-value: 0.6159). R-squares = 0.005 means only 0.05% of the variation in life expectancy is explained by population.
