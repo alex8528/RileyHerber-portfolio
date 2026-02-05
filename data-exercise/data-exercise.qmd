@@ -1,0 +1,196 @@
+---
+title: "Synthetic Data Exercise"
+---
+# Introduction and Data
+This synthetic data generation is taken from the notes while reducing the number of variables, so I can understand how to generate and explore the data better. This synthetic dataset includes basic patient-level variables such as age, gender, treatment group, and blood pressure. I wanted to explore the relationship these variables had with each other, especially how they affect blood pressure. Blood pressure was not intentially associated with any other variables and was generated randomly. 
+
+```{r}
+# make sure the packages are installed
+# Load required packages
+library(dplyr)
+library(purrr)
+library(lubridate)
+library(ggplot2)
+
+# Set a seed for reproducibility
+set.seed(123)
+# Define the number of observations (patients) to generate
+n_patients <- 100
+
+syn_dat <- data.frame(
+  PatientID = numeric(n_patients),
+  Age = numeric(n_patients),
+  Gender = character(n_patients),
+  TreatmentGroup = character(n_patients),
+    BloodPressure = numeric(n_patients)
+)
+
+#Patient ID
+syn_dat$PatientID <- 1:n_patients
+
+#Age (numeric variable)
+syn_dat$Age <- round(rnorm(n_patients, mean = 45, sd = 10), 1)
+
+#Gender (categorical variable)
+syn_dat$Gender <- purrr::map_chr(sample(c("Male", "Female"), n_patients, replace = TRUE), as.character)
+
+#Treatment Group (categorical variable)
+syn_dat$TreatmentGroup <- purrr::map_chr(sample(c("A", "B", "Placebo"), n_patients, replace = TRUE), as.character)
+
+#Blood Pressure (numeric variable)
+syn_dat$BloodPressure <- round(runif(n_patients, min = 90, max = 160), 1)
+
+head(syn_dat)
+```
+
+# Plotting
+These plots explore how blood pressure varies across treatment groups, gender, and age in the synthetic dataset. Boxplots are used to compare the distribution of blood pressure by treatment group and gender, while a scatterplot with a fitted regression line illustrates the relationship between age and blood pressure.
+```{r}
+# ggplot2 boxplot for blood pressure by treatment group
+ggplot(syn_dat, aes(x = TreatmentGroup, y = BloodPressure)) +
+  geom_boxplot() +
+  labs(x = "Treatment Group", y = "BloodPressure") +
+  theme_bw()
+
+
+# ggplot2 boxplot for blood pressure by gender
+ggplot(syn_dat, aes(x = Gender, y = BloodPressure)) +
+  geom_boxplot() +
+  labs(x = "Gender", y = "BloodPressure") +
+  theme_bw()
+
+#ggplot2 scatterplot for blood pressure by age
+ggplot(syn_dat, aes(x = Age, y = BloodPressure)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    title = "Age vs Blood Pressure",
+    x = "Age",
+    y = "Blood Pressure"
+  ) +
+  theme_bw()
+```
+
+```{r}
+lm_bp <- lm(BloodPressure ~ Age + Gender + TreatmentGroup, data = syn_dat)
+summary(lm_bp)
+
+glm_bp <- lm(BloodPressure ~ Age + Gender + TreatmentGroup, data = syn_dat)
+summary(lm_bp)
+```
+
+# Additional Dataset Generation 
+
+I decided to try to generate my own completely separate dataset based on how the previous dataset was generated. This new synthetic dataset represents 250 students and includes variables such as age, gender, sleep hours, study hours, and exam scores. Exam scores were generated to increase with study hours and to vary nonlinearly with sleep hours, reflecting optimal performance around 7–8 hours of sleep.
+
+
+```{r}
+set.seed(123)
+
+# Number of students
+n_students <- 250
+
+# Generate synthetic data
+syn_students <- data.frame(
+    studentID = numeric(n_students),
+    Age = numeric(n_students),
+    Gender = character(n_students),
+    SleepHours = numeric(n_students),
+    StudyHours = numeric(n_students),
+    ExamScore = numeric(n_students)
+)
+#Student ID
+syn_students$studentID <- 1:n_students
+
+#Age (numeric variable)
+syn_students$Age <- round(rnorm(n_students, mean = 20, sd = 3), 1)
+
+#Gender (categorical variable)
+syn_students$Gender <- purrr::map_chr(sample(c("Male", "Female"), n_students, replace = TRUE), as.character)
+
+#Sleep Hours (numeric variable)
+syn_students$SleepHours <- round(rnorm(n_students, mean = 7, sd = 1.2), 1)
+
+#Study Hours (numeric variable)
+syn_students$StudyHours <- round(rnorm(n_students, mean = 10, sd = 4), 1)
+
+#Exam Scores (numeric variable) #AI was used to help generate the Exam Score Dependencies
+syn_students$ExamScore <- round(50 + 2.5 * syn_students$StudyHours + -3 * (syn_students$SleepHours - 7.5)^2 +
+     rnorm(n_students, mean = 0, sd = 8), 1 )
+
+head(syn_students)
+
+#Save as RDS
+saveRDS(syn_students, file = "synthetic_students.rds")
+```
+
+# Plotting
+
+The plots explore the relationships between exam scores and the student variables. Boxplots show how exam scores vary by gender, while scatterplots illustrate how exam scores change with study hours, sleep hours, and age. The study hours plot reveals a positive linear trend, the sleep hours plot shows a curved relationship with optimal performance around 7–8 hours, and the age plot shows little effect, as expected. These plots confirm that the synthetic data reflect the relationships built into the dataset.
+
+```{r}
+#Boxplot of Exam Score by Gender
+plot1 <- ggplot(syn_students, aes(x = Gender, y = ExamScore)) +
+  geom_boxplot(fill = "lightgreen") +
+  labs(
+    x = "Gender",
+    y = "Exam Score",
+    title = "Exam Score by Gender"
+  ) +
+  theme_bw()
+
+#Scatterplot: Study Hours vs Exam Score
+plot2 <- ggplot(syn_students, aes(x = StudyHours, y = ExamScore)) +
+  geom_point(alpha = 0.5, color = "darkblue") +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  labs(
+    x = "Study Hours",
+    y = "Exam Score",
+    title = "Relationship Between Study Hours and Exam Score"
+  ) +
+  theme_bw()
+
+#Scatterplot: Sleep Hours vs Exam Score 
+plot3 <- ggplot(syn_students, aes(x = SleepHours, y = ExamScore)) +
+  geom_point(alpha = 0.5, color = "darkorange") +
+  geom_smooth(se = FALSE, color = "red") +
+  labs(
+    x = "Sleep Hours",
+    y = "Exam Score",
+    title = "Relationship Between Sleep Hours and Exam Score"
+  ) +
+  theme_bw()
+
+#Scatterplot: Age vs Exam Score
+plot4 <- ggplot(syn_students, aes(x = Age, y = ExamScore)) +
+  geom_point(alpha = 0.5, color = "purple") +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  labs(
+    x = "Age",
+    y = "Exam Score",
+    title = "Relationship Between Age and Exam Score"
+  ) +
+  theme_bw()
+
+plots <- list(plot1, plot2, plot3, plot4)
+filenames <- c("gender_vs_score.png", "study_vs_score.png", "sleep_vs_score.png", "age_vs_score.png")
+
+for(i in seq_along(plots)) {
+  ggsave(
+    filename = file.path("figures", filenames[i]),
+    plot = plots[[i]],
+    width = 6,
+    height = 4,
+    dpi = 300
+  )
+}
+```
+
+
+```{r}
+lm_es <- lm(ExamScore ~ SleepHours + StudyHours, data = syn_students)
+summary(lm_es)
+
+glm_es <- glm(ExamScore ~ SleepHours + StudyHours, data = syn_students, family = gaussian())
+summary(glm_es)
+```
